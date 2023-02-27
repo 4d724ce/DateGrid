@@ -15,12 +15,13 @@ public struct DateGrid<DateView>: View where DateView: View {
     ///   - selectedMonth: date relevant to showing month, then you can extract the components
     ///   - content:
     public init(
+        calendar: Calendar,
         interval: DateInterval,
         selectedMonth: Binding<Date>,
         mode: CalendarMode,
         @ViewBuilder content: @escaping (DateGridDate) -> DateView
     ) {
-        self.viewModel = .init(interval: interval, mode: mode)
+        self.viewModel = .init(calendar: calendar, interval: interval, mode: mode)
         self._selectedMonth = selectedMonth
         self.content = content
     }
@@ -46,6 +47,7 @@ public struct DateGrid<DateView>: View where DateView: View {
 struct CalendarView_Previews: PreviewProvider {
     
     @State static var selectedMonthDate = Date()
+    @Environment(\.calendar) static var calendar
     
     static var previews: some View {
         VStack {
@@ -53,6 +55,7 @@ struct CalendarView_Previews: PreviewProvider {
             WeekDaySymbols()
             
             DateGrid(
+                calendar: calendar,
                 interval:
                         .init(
                             start: Date.getDate(from: "2020 01 11")!,
